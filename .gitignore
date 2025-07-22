@@ -1,0 +1,63 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+env/
+.env/
+venv/
+.venv/
+ENV/
+*.pyo
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# ===== Airflow =====
+logs/
+log/               
+airflow.db           
+*.pid                 
+unittests.cfg
+webserver_config.py  
+
+# ===== Docker =====
+*.log
+*.pid
+*.sock
+tmp/
+.dockerignore
+docker-compose.override.yml  # local override，視情況忽略
+
+# ===== OS & IDE Specific =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== Environment / Secrets =====
+.env
+.env.*
+secrets/
+credentials/
+*.pem
+*.key
+*.crt
+
+# ===== PostgreSQL (pgvector 存放向量時用到) =====
+*.sql
+*.dump
+*.tar
+pgdata/
+
+# ===== Airflow dags/__pycache__ 如果有手動跑過 DAG =====
+dags/__pycache__/
+
+# ===== Optional: GitHub Copilot/VSCode/etc cache =====
+copilot/
+.history/

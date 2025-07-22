@@ -1,0 +1,12 @@
+feedparser
+beautifulsoup4
+requests
+pandas
+sqlalchemy
+psycopg2-binary
+sentence-transformers
+numpy
+scikit-learn
+matplotlib
+seaborn
+google-generativeai
