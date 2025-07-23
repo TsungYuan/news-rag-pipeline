@@ -9,7 +9,7 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 ### 🔧  Components
 
 | Component        | Tool/Tech                         |
-|:----------------:|:---------------------------------:|
+|----------------|:---------------------------------:|
 | ETL Pipeline     | Apache Airflow                    |
 | Embedding Model  | `BAAI/bge-m3` via SentenceTransformer |
 | Vector Database  | PostgreSQL with `pgvector` extension |
