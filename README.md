@@ -1,12 +1,12 @@
-# 📰  News RAG Pipeline
+# 📰 &nbsp;News RAG Pipeline
 
 A lightweight Retrieval-Augmented Generation (RAG) pipeline that allows users to query recent news, search semantically relevant content, and get natural language responses powered by Google Gemini.
 
-## 🚀  Project Overview
+## 🚀 &nbsp;Project Overview
 
 This project builds an end-to-end pipeline combining ETL, vector search, and Large Language Models (LLMs) to summarize news articles based on a user's query.
 
-### 🔧  Components
+### 🔧 &nbsp;Components
 
 | Component        | Tool/Tech                         |
 |----------------|:---------------------------------:|
@@ -21,7 +21,7 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 
 ---
 
-## 📦  Features
+## 📦 &nbsp;Features
 
 - **Automated ETL with Airflow**  
   Periodically crawls and stores the latest news content from sources.
@@ -38,7 +38,7 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 
 ---
 
-## ⚙️  Setup Instructions
+## ⚙️ &nbsp;Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -91,7 +91,7 @@ Make sure Airflow is configured properly to run the DAGs that fetch and embed ne
 python gradio_app.py
 ```
 
-## 📥  Example Usage
+## 📥 &nbsp;Example Usage
 
 Enter a query like:
 
@@ -104,7 +104,7 @@ The pipeline will:
 3.	Send the prompt to Gemini API
 4.	Display the summary in the UI
 
-## 🧠  Model Info
+## 🧠 &nbsp;Model Info
 
 - **LLM**: gemini-2.5-pro via Google API
 
@@ -114,7 +114,7 @@ The pipeline will:
 
 - **ETL**: Airflow
 
-## 🙌  Acknowledgements
+## 🙌 &nbsp;Acknowledgements
 - [Apache Airflow](https://airflow.apache.org/)
 - [BAAI / bge-m3](https://huggingface.co/BAAI/bge-m3)
 - [FastAPI](https://fastapi.tiangolo.com/)
