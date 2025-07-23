@@ -4,7 +4,7 @@ This project implements a Retrieval-Augmented Generation (RAG) pipeline to summa
 
 ## Features
 - Scrape latest news
-- Embed articles using OpenAI
+- Embed articles using Gemini
 - Store vectors with a vector DB
 - Ask questions over the news corpus
 
