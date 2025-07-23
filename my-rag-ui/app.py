@@ -18,6 +18,6 @@ iface = gr.Interface(
     fn=query_api, 
     inputs="text", 
     outputs=[gr.JSON(label="Answer"), gr.JSON(label="Results")], 
-    title="Semantic Search"
+    title="Taiwan News Agent"
 )
 iface.launch(server_name="0.0.0.0", server_port=7860)
