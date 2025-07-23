@@ -115,12 +115,12 @@ The pipeline will:
 - **ETL**: Airflow
 
 ## 🙌  Acknowledgements
-- Airfloe
-- BAAI / bge-m3
-- FastAPI
-- Google Gemini
-- Gradio
-- pgvector
+- [Apache Airflow](https://airflow.apache.org/)
+- [BAAI / bge-m3](https://huggingface.co/BAAI/bge-m3)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Google Gemini](https://ai.google.dev/)
+- [Gradio](https://www.gradio.app/)
+- [pgvector](https://github.com/pgvector/pgvector)
 
 
 
