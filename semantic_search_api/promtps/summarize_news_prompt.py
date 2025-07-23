@@ -4,7 +4,7 @@ SUMMARIZE_NEWS_PROMPT = """
 
 ---
 
-## 📌 任務說明：
+## 任務說明：
 - 使用者的問題如下：
 【{query}】
 
@@ -34,17 +34,17 @@ SUMMARIZE_NEWS_PROMPT = """
 3. 回覆格式必須為 JSON，並包含以下欄位：
 
 ```json
-{
+{{
   "summary": "（請寫一段 200 字內的摘要，客觀回應使用者問題）",
   "references": [
-    {
+    {{
       "title": "新聞標題",
       "publisher": "新聞來源",
-    },
-    {
+    }},
+    {{
       "title": "新聞標題",
       "publisher": "新聞來源",
-    }
+    }}
   ]
-}
+}}
 """

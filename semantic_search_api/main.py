@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import semantic_search, metadata_search
+from routes import semantic_search, metadata_search, rag_agent
 import logging
 
 logging.basicConfig(
@@ -17,3 +17,5 @@ def root():
 app.include_router(semantic_search.router)
 
 app.include_router(metadata_search.router)
+
+app.include_router(rag_agent.router)
