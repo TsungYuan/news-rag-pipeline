@@ -62,7 +62,7 @@ Create a .env file and add your Gemini API key:
 ```env
 AIRFLOW_UID={AIRFLOW_UID}
 NEWS_DB_URL={postges url}
-GEMINI_API_KEY="AIzaSyDoaJZAlwaNKL3NhzkK-vTo95ye3relh2U"
+GEMINI_API_KEY={GEMINI_API_KEY}
 ```
 
 ### 4. Run ETL (via Airflow)
