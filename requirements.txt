@@ -10,3 +10,6 @@ scikit-learn
 matplotlib
 seaborn
 google-generativeai
+fastapi
+uvicorn
+gradio
