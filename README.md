@@ -1,12 +1,12 @@
-# 📰 News RAG Pipeline
+# 📰  News RAG Pipeline
 
 A lightweight Retrieval-Augmented Generation (RAG) pipeline that allows users to query recent news, search semantically relevant content, and get natural language responses powered by Google Gemini.
 
-## 🚀 Project Overview
+## 🚀  Project Overview
 
 This project builds an end-to-end pipeline combining ETL, vector search, and Large Language Models (LLMs) to summarize news articles based on a user's query.
 
-### 🔧 Components
+### 🔧  Components
 
 | Component        | Tool/Tech                         |
 |------------------|----------------------------------|
@@ -21,7 +21,7 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 
 ---
 
-## 📦 Features
+## 📦  Features
 
 - **Automated ETL with Airflow**  
   Periodically crawls and stores the latest news content from sources.
@@ -38,7 +38,7 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️  Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -91,7 +91,7 @@ Make sure Airflow is configured properly to run the DAGs that fetch and embed ne
 python gradio_app.py
 ```
 
-## 📥 Example Usage
+## 📥  Example Usage
 
 Enter a query like:
 
@@ -103,6 +103,26 @@ The pipeline will:
 2.	Construct a prompt using top results
 3.	Send the prompt to Gemini API
 4.	Display the summary in the UI
+
+## 🧠  Model Info
+
+- **LLM**: gemini-2.5-pro via Google API
+
+- **Embedding**: BAAI/bge-m3 (optimized for multilingual retrieval)
+
+- **Vector DB**: PostgreSQL + pgvector 
+
+- **ETL**: Airflow
+
+## 🙌  Acknowledgements
+- Airfloe
+- BAAI / bge-m3
+- FastAPI
+- Google Gemini
+- Gradio
+- pgvector
+
+
 
 
 
