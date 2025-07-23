@@ -99,10 +99,10 @@ Enter a query like:
 最近有什麼特別的社會新聞嗎？
 ```
 The pipeline will:
-	1.	Search relevant news from the vector store
-	2.	Construct a prompt using top results
-	3.	Send the prompt to Gemini API
-	4.	Display the summary in the UI
+1.	Search relevant news from the vector store
+2.	Construct a prompt using top results
+3.	Send the prompt to Gemini API
+4.	Display the summary in the UI
 
 
 
