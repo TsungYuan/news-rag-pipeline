@@ -9,7 +9,7 @@ def query_api(user_input, history):
         response = requests.post(API_URL, json=payload)
         response.raise_for_status()
         data = response.json()
-        return data.get("results", []), data.get("answer", {})
+        return data.get("answer", {}), data.get("results", [])
         # return data.dumps(data, indent=2, ensure_ascii=False)
     except Exception as e:
         return f"Error: {str(e)}"
@@ -17,7 +17,7 @@ def query_api(user_input, history):
 iface = gr.Interface(
     fn=query_api, 
     inputs="text", 
-    outputs=[gr.JSON(label="Results"), gr.JSON(label="Answer")], 
+    outputs=[gr.JSON(label="Answer"), gr.JSON(label="Results")], 
     title="Semantic Search"
 )
 iface.launch(server_name="0.0.0.0", server_port=7860)
