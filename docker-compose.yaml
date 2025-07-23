@@ -359,6 +359,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  gradio-ui:
+    build: ./my-rag-ui
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./my-rag-ui:/app
+    depends_on:
+      - semantic-api
+    restart: always
 
 volumes:
   postgres-db-volume:
