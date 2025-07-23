@@ -104,6 +104,7 @@ The pipeline will:
 3.	Send the prompt to Gemini API
 4.	Display the summary in the UI
 
+
 Output will be like:
 
 answer:
