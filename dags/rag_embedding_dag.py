@@ -1,44 +1,57 @@
 from airflow.decorators import dag, task
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
-import pandas as pd
-import re
+from src.db_utils import fetch_data_from_postgres
+from src.text_processor import chunk_article_content
+from src.embedding_generator import generate_embeddings_for_chunks
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 import logging
 import os
 import json
+import pandas as pd
+import re
 
 logger = logging.getLogger(__name__)
-DB_CONN = os.getenv("NEWS_DB_URL")
+
+CHUNK_EMBEDDINGS_TABLE_SQL = """
+    CREATE TABLE IF NOT EXISTS news_chunk_embeddings (
+        id SERIAL PRIMARY KEY,
+        news_id INTEGER REFERENCES news_metadata(news_id),
+        chunk_text TEXT,
+        embedding vector(1024), -- Ensure this matches your model's embedding dimension
+        metadata JSONB
+    );
+"""
+embedding_model_name = "BAAI/bge-m3"
+
 
 @dag(
-    dag_id="rag_embedding_dag",
-    start_date=datetime.now() - timedelta(days=1),
+    dag_id="rag_embedding_pipeline", # Consistent DAG ID name
+    start_date=datetime(2025, 7, 6), # Fixed start date
     schedule="*/10 * * * *",
     catchup=False,
     max_active_runs=1,
-    default_args={"retries": 2}
+    default_args={
+        "retries": 2,
+        "retry_delay": timedelta(minutes=1),
+        "owner": "airflow"
+    },
+    tags=["rag", "embedding", "news"]
 )
-def rag_embedding_pipline():
+def rag_embedding_pipeline():
 
     create_chunk_embeddings_table = SQLExecuteQueryOperator(
         task_id='create_chunk_embeddings_table',
         conn_id='postgres_news_ai',
-        sql="""
-            CREATE TABLE IF NOT EXISTS news_chunk_embeddings (
-            id SERIAL PRIMARY KEY,
-            news_id INTEGER REFERENCES news_metadata(news_id),
-            chunk_text TEXT,
-            embedding vector(1024),
-            metadata JSONB
-            );
-            """
+        sql=CHUNK_EMBEDDINGS_TABLE_SQL,
     )
 
     @task()
-    def fetch_unembedded_news():
-        engine = create_engine(DB_CONN)
-        query = """
+    def _fetch_unembedded_news_callable(conn_id: str):
+        """
+        Fetches news articles that have not yet been chunked and embedded.
+        """
+        query = f"""
             SELECT r.id AS news_id, r.content, m.title, m.published_at, m.publisher, m.category
             FROM news_raw_data r
             LEFT JOIN news_metadata m
@@ -47,98 +60,57 @@ def rag_embedding_pipline():
                 SELECT DISTINCT news_id 
                 FROM news_chunk_embeddings
             )
-            LIMIT 50;
+            LIMIT 50
+            ;
         """
-        df = pd.read_sql(query, engine)
-        df["published_at"] = df["published_at"].astype(str)
-        logger.info(f"{len(df)} news was fetched.")
+        df = fetch_data_from_postgres(conn_id=conn_id, query=query)
+        if not df.empty:
+            df["published_at"] = df["published_at"].astype(str)
+        logger.info(f"Fetched {len(df)} news for chunking and embedding.")
         return df.to_dict(orient="records")
-    
+
     @task()
-    def chunk_text(news_list, max_length=300, overlap=50):
-        chunked  = []
-        current_chunk = ""
+    def _chunk_text_callable(news_list: list[dict]):
+        """
+        Chunks the text content of news articles.
+        Retrieves chunking parameters from Airflow Variables.
+        """
+        if not news_list:
+            logger.info("No news received for chunking.")
+            return []
 
-        for news in news_list:
-            setences = re.split(r"[。！？]", news["content"])
-            for sent in setences:
-                if not sent.strip():
-                    continue
-                if len(current_chunk) + len(sent) <= max_length:
-                    current_chunk += sent + "。"
-                else:
-                    if current_chunk:
-                        chunk_idx = len(current_chunk)
-                        chunked.append({
-                            "news_id": news["news_id"],
-                            "chunk_text": current_chunk,
-                            "metadata": {
-                                "news_id": news["news_id"],
-                                "title": news["title"],
-                                "published_at": news["published_at"],
-                                "publisher": news["publisher"],
-                                "category": news["category"],
-                                "chunk_idx": chunk_idx
-                            }
-                        })
-                    current_chunk = current_chunk[-overlap:] + sent if overlap > 0 else sent
-            if  current_chunk:
-                chunk_idx = len(current_chunk)
-                chunked.append({
-                    "news_id": news["news_id"],
-                    "chunk_text": current_chunk,
-                    "metadata": {
-                        "news_id": news["news_id"],
-                        "title": news["title"],
-                        "published_at": news["published_at"],
-                        "publisher": news["publisher"],
-                        "category": news["category"],
-                        "chunk_idx": chunk_idx
-                    }
-                })
-        logger.info(f"{len(news_list)} news was splited into {len(chunked)} chunks.")
-        return chunked
-    
+        chunked_data = chunk_article_content(news_list)
+        return chunked_data
+
     @task(retries=3, retry_delay=timedelta(minutes=1))
-    def generate_embedding(chunk_list):
+    def _generate_embedding_callable(chunk_list: list[dict], conn_id: str):
+        """
+        Generates embeddings for text chunks and loads them into the database.
+        Retrieves model name from Airflow Variable.
+        """
         if not chunk_list:
-            logger.info(f"No chunk data received. Skipping embedding generation.")
+            logger.info("No chunks to embed.")
             return
-    
-        from sentence_transformers import SentenceTransformer
 
-        model = SentenceTransformer("BAAI/bge-m3")
+        inserted_count = generate_embeddings_for_chunks(
+            chunk_list=chunk_list,
+            model_name=embedding_model_name,
+            conn_id=conn_id
+        )
+        logger.info(f"Total {inserted_count} chunk embeddings processed.")
 
-        texts = [item["chunk_text"] for item in chunk_list]
+    # Define task dependencies
+    t_create_chunk_embeddings_table = create_chunk_embeddings_table
+    t_fetch_unembedded_news = _fetch_unembedded_news_callable(conn_id="postgres_news_ai")
+    t_chunked_news = _chunk_text_callable(t_fetch_unembedded_news)
+    t_generate_embedding = _generate_embedding_callable(t_chunked_news, conn_id="postgres_news_ai")
 
-        logger.info(f"Start generating embeddings for {len(chunk_list)} chunks.")
-        dense_vec = model.encode(texts, convert_to_tensor=False)
-        logger.info(f"{len(dense_vec)} of embeddings were generated.")
+    t_create_chunk_embeddings_table >> t_fetch_unembedded_news
+    t_fetch_unembedded_news >> t_chunked_news
+    t_chunked_news >> t_generate_embedding
 
-        result = []
-        for i, vec in enumerate(dense_vec):
-            result.append({
-                "news_id": chunk_list[i]["news_id"],
-                "chunk_text": chunk_list[i]["chunk_text"],
-                "embedding": vec.tolist(),
-                "metadata": chunk_list[i]["metadata"]
-            })
-        
-        engine = create_engine(DB_CONN)
-        df = pd.DataFrame(result)
-        df["metadata"] = df["metadata"].apply(json.dumps)
-        df.to_sql("news_chunk_embeddings", engine, if_exists="append", index=False)
-        logger.info(f"Insert {len(df)} records to DB")
-
-    
-    t1 = create_chunk_embeddings_table
-    raw_news = fetch_unembedded_news()
-    chunked = chunk_text(raw_news)
-    embedded = generate_embedding(chunked)
-
-    t1 >> raw_news
-
-rag_embedding_dag = rag_embedding_pipline()
+# Instantiate the DAG
+rag_embedding_dag = rag_embedding_pipeline()
 
 
 
