@@ -1,10 +1,9 @@
+import pandas as pd
+import logging
 from airflow import DAG 
 from datetime import datetime, timedelta
-import pandas as pd
 from sqlalchemy import create_engine
-import os
 from flask import jsonify
-import logging
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator

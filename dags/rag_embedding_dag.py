@@ -6,10 +6,6 @@ from src.text_processor import chunk_article_content
 from src.embedding_generator import generate_embeddings_for_chunks
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 import logging
-import os
-import json
-import pandas as pd
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +22,8 @@ embedding_model_name = "BAAI/bge-m3"
 
 
 @dag(
-    dag_id="rag_embedding_pipeline", # Consistent DAG ID name
-    start_date=datetime(2025, 7, 6), # Fixed start date
+    dag_id="rag_embedding_pipeline",
+    start_date=datetime(2025, 7, 6),
     schedule="*/10 * * * *",
     catchup=False,
     max_active_runs=1,
@@ -99,7 +95,6 @@ def rag_embedding_pipeline():
         )
         logger.info(f"Total {inserted_count} chunk embeddings processed.")
 
-    # Define task dependencies
     t_create_chunk_embeddings_table = create_chunk_embeddings_table
     t_fetch_unembedded_news = _fetch_unembedded_news_callable(conn_id="postgres_news_ai")
     t_chunked_news = _chunk_text_callable(t_fetch_unembedded_news)
@@ -109,7 +104,6 @@ def rag_embedding_pipeline():
     t_fetch_unembedded_news >> t_chunked_news
     t_chunked_news >> t_generate_embedding
 
-# Instantiate the DAG
 rag_embedding_dag = rag_embedding_pipeline()
 
 

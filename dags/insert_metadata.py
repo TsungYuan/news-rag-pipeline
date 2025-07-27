@@ -4,11 +4,9 @@ from datetime import datetime, timedelta
 from sqlalchemy import create_engine, text
 from src.db_utils import fetch_data_from_postgres
 from src.gemini_classifier import GeminiNewsClassifier
-import pandas as pd
 import logging
 import google.generativeai as genai
 import os
-import json
 import time
 
 logger = logging.getLogger(__name__)

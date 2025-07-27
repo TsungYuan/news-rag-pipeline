@@ -1,6 +1,5 @@
 import re
 import logging
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -26,23 +25,20 @@ def chunk_article_content(news_list: list[dict], max_length: int = 300, overlap:
         news_id = news.get("news_id")
         content = news.get("content")
         
-        # Prepare base metadata for all cases
         base_metadata = {
             "news_id": news_id,
             "title": news.get("title"),
             "published_at": news.get("published_at"),
             "publisher": news.get("publisher"),
-            "category": news.get("category"),
-            # chunk_idx will be added later for actual chunks
+            "category": news.get("category")
         }
         
         if not content:
             logger.warning(f"News ID {news_id} has no content. Creating an empty chunk entry to mark as processed.")
-            # For news with no content, add a single placeholder chunk
             chunked_data.append({
                 "news_id": news_id,
-                "chunk_text": None,  # Explicitly set chunk_text to None
-                "metadata": {**base_metadata, "chunk_idx": 0, "status": "no_content"} # Add status for easier tracking
+                "chunk_text": None,
+                "metadata": {**base_metadata, "chunk_idx": 0, "status": "no_content"}
             })
             continue
 
@@ -70,7 +66,6 @@ def chunk_article_content(news_list: list[dict], max_length: int = 300, overlap:
             else:
                 current_chunk += sent + "。"
 
-        # Add any remaining content as a final chunk
         if current_chunk:
             chunked_data.append({
                 "news_id": news_id,

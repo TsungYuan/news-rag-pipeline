@@ -62,3 +62,4 @@ dags/__pycache__/
 # ===== Optional: GitHub Copilot/VSCode/etc cache =====
 copilot/
 .history/
+*.drawio

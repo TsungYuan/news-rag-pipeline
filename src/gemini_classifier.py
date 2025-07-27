@@ -59,7 +59,7 @@ class GeminiNewsClassifier:
                 generation_config=genai.types.GenerationConfig(
                     response_mime_type="application/json"
                 ),
-                request_options={"timeout": 120} # Add timeout for API request
+                request_options={"timeout": 120}
             )
             if not response.text:
                 logger.warning(f"Gemini API returned empty response for batch. Prompt: {prompt[:200]}...")
@@ -73,5 +73,4 @@ class GeminiNewsClassifier:
             return [{"id": item["news_id"], "category": "JSON_Parse_Error"} for item in news_batch]
         except Exception as e:
             logger.error(f"Error classifying news batch with Gemini: {e}. Prompt: {prompt[:200]}...")
-            # Return a default category for failed items to allow pipeline to continue
             return [{"id": item["news_id"], "category": "API_Error"} for item in news_batch]

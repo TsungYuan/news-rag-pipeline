@@ -2,7 +2,6 @@ from sqlalchemy import create_engine, text
 import os
 import logging
 import pandas as pd
-import psycopg2 # Use psycopg2 directly if create_engine doesn't fully support pgvector registration
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +48,6 @@ def insert_dataframe_to_postgres(df: pd.DataFrame, table_name: str, conn_id: str
     try:
         with engine.connect() as conn:
             if unique_col:
-                # Fetch existing unique identifiers to filter out duplicates
                 existing_identifiers = pd.read_sql(f"SELECT {unique_col} FROM {table_name}", conn)
                 df = df[~df[unique_col].isin(existing_identifiers[unique_col])]
                 if df.empty:
@@ -88,7 +86,6 @@ def update_records_in_postgres(conn_id: str, table_name: str, records: list[dict
     conn = None
     try:
         conn = engine.connect()
-        # Begin transaction for batch update
         trans = conn.begin()
         updated_count = 0
         for record in records:

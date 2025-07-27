@@ -2,7 +2,6 @@ from sentence_transformers import SentenceTransformer
 import logging
 import pandas as pd
 import json
-import numpy as np # Ensure numpy is imported for array operations
 
 logger = logging.getLogger(__name__)
 
@@ -44,17 +43,14 @@ def generate_embeddings_for_chunks(chunk_list: list[dict], model_name: str, conn
     
     records_to_insert = []
     
-    # Process each chunk individually to handle None content gracefully
     for item in chunk_list:
         news_id = item["news_id"]
         chunk_text = item["chunk_text"]
         metadata = item["metadata"]
-        
-        embedding_vec = None # Initialize embedding as None
+        embedding_vec = None
         
         if chunk_text is not None and len(chunk_text.strip()) > 0:
             try:
-                # Encode only if chunk_text is valid
                 embedding_vec = model.encode(chunk_text, normalize_embeddings=True, convert_to_tensor=False).tolist()
                 logger.debug(f"Generated embedding for news_id: {news_id}, chunk_idx: {metadata.get('chunk_idx')}")
             except Exception as e:
@@ -64,8 +60,8 @@ def generate_embeddings_for_chunks(chunk_list: list[dict], model_name: str, conn
 
         records_to_insert.append({
             "news_id": news_id,
-            "chunk_text": chunk_text, # Will be None for no-content news
-            "embedding": embedding_vec, # Will be None for no-content or failed embedding
+            "chunk_text": chunk_text,
+            "embedding": embedding_vec,
             "metadata": json.dumps(metadata, ensure_ascii=False)
         })
 
@@ -80,7 +76,7 @@ def generate_embeddings_for_chunks(chunk_list: list[dict], model_name: str, conn
         df=df,
         table_name="news_chunk_embeddings",
         conn_id=conn_id,
-        if_exists="append", # Assuming you want to append new chunks
-        index=False # Don't write DataFrame index as a column
+        if_exists="append",
+        index=False
     )
     return inserted_count
