@@ -13,7 +13,6 @@ def rag_ai_agent(query: str, top_k: int = 5) -> RAGAgentResponse:
     try:
         search_response = semantic_search(query=query, top_k=top_k)
         retrieved_chunks_results_dicts: List[ChunkMetadata] = search_response.results 
-        print(f"retrieved_chunks_results_dicts: {retrieved_chunks_results_dicts}")
 
         if not retrieved_chunks_results_dicts:
             logger.warning(f"No relevent chunks found for query: {query}")
@@ -44,8 +43,7 @@ def rag_ai_agent(query: str, top_k: int = 5) -> RAGAgentResponse:
                 "meta_data": chunk.metadata
             }
             llm_context_chunk.append(chunk_dict)
-        
-        print(f"llm_context_chunk: {llm_context_chunk}")
+
         prompt = build_prompt(query, llm_context_chunk)
         logger.info("Calling Gemini LLM...")
         answer = call_gemini(prompt)
