@@ -24,7 +24,6 @@ def rag_ai_agent(query: str, top_k: int = 5) -> RAGAgentResponse:
         
         # if chunks doesn't provide enough information for LLM to process send the whole article of the news
         unique_news_ids = list(set([chunk.news_id for chunk in retrieved_chunks_results_dicts]))
-        print(f"news ids: {unique_news_ids}")
         full_articles_content: Dict[int, str] = {}
         if len(unique_news_ids) <= 2: 
             full_articles_content = get_full_article_content(unique_news_ids)
