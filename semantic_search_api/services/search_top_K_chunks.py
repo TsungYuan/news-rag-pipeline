@@ -1,4 +1,4 @@
-from services.embedder import embed_text
+from services.embeddor import embed_text
 from services.db import SessionLocal
 from models.schemas import ChunkMetadata, SearchResponse
 from sqlalchemy import text
@@ -13,29 +13,17 @@ def semantic_search(query: str, top_k: int=5) -> SearchResponse:
         embedding_query = embed_text(query)
 
         with SessionLocal() as db:
-            sql = text("""
-                    WITH similarity_search AS (
-                       SELECT DISTINCT ON (news_id)
-                            news_id, metadata, 
-                            1 - (embedding <=> CAST(:embedding_query AS vector)) AS similarity
-                       FROM news_chunk_embeddings
-                       ORDER BY news_id, similarity DESC
-                    ),
-                    top_k_news AS (
-                       SELECT *
-                       FROM similarity_search
-                       ORDER BY similarity DESC
-                       LIMIT :top_k
-                    )
-                    SELECT tk.news_id, tk.metadata, tk.similarity, nr.content
-                    FROM top_k_news tk
-                    JOIN news_raw_data nr
-                       ON nr.id = tk.news_id
-                    ORDER BY tk.similarity DESC
+            sql_only_chunk = text("""
+                    SELECT news_id,chunk_text, metadata, 
+                        1 - (embedding <=> CAST(:embedding_query AS vector)) AS similarity
+                    FROM news_chunk_embeddings
+                    WHERE embedding IS NOT NULL
+                    ORDER BY similarity DESC
+                    LIMIT :top_k;
                     ;
             """)
 
-            similarity_result = db.execute(sql, {
+            similarity_result = db.execute(sql_only_chunk, {
                 "query": query,
                 "embedding_query": embedding_query,
                 "top_k": top_k
@@ -47,7 +35,7 @@ def semantic_search(query: str, top_k: int=5) -> SearchResponse:
                 ChunkMetadata(
                     news_id=row.news_id,
                     metadata=row.metadata,
-                    content=row.content,
+                    chunk_text=row.chunk_text,
                     similarity=row.similarity
                 )
                 for row in similarity_result

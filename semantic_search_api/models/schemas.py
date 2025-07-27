@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
 from datetime import datetime
 
 class SearchRequest(BaseModel):
@@ -8,9 +8,9 @@ class SearchRequest(BaseModel):
 
 class ChunkMetadata(BaseModel):
     news_id: int
-    similarity: float
-    content: str
-    metadata: dict
+    similarity: Optional[float] = None
+    chunk_text: Optional[str] = None
+    metadata: Dict[str, Any]
 
 class SearchResponse(BaseModel):
     query: str
