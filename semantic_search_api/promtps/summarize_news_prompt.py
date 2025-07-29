@@ -40,10 +40,12 @@ SUMMARIZE_NEWS_PROMPT = """
   "summary": "（請寫一段 200 字內的摘要，客觀回應使用者問題）",
   "references": [
     {{
+      "news_id": <請填寫此參考新聞實際的 news_id 數值，例如：3507>,
       "title": "新聞標題",
       "publisher": "新聞來源",
     }},
     {{
+      "news_id": <請填寫此參考新聞實際的 news_id 數值，例如：3507>,
       "title": "新聞標題",
       "publisher": "新聞來源",
     }}

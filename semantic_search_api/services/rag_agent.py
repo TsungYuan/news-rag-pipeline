@@ -19,7 +19,7 @@ def rag_ai_agent(query: str, top_k: int = 5) -> RAGAgentResponse:
             return RAGAgentResponse(
                 query=query,
                 results=[],
-                answer=Answer(summary="根據目前的新聞內容，無法準確回答此問題。", references=[])
+                answer=Answer(new_id="", summary="根據目前的新聞內容，無法準確回答此問題。", references=[])
             )
         
         # if chunks doesn't provide enough information for LLM to process send the whole article of the news
