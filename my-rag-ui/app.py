@@ -10,7 +10,19 @@ def query_api(user_input, history):
         response.raise_for_status()
         data = response.json()
         answer = data.get("answer", {})
-        return answer.get("summary", "Can't find related news.")
+        summary = answer.get("summary", "根據目前的新聞內容，無法準確回答此問題。")
+        references = data.get("results", [])
+
+        if references:
+            refs_str = "\n\n**參考資料：**\n" + "\n"
+            for _, ref in enumerate(references):
+                title = ref.get("meta_data", {}).get("title", "未知標題")
+                publisher = ref.get("meta_data", {}).get("publisher", "未知來源")
+                url = ref.get("link", "#")
+                refs_str += f"- [{title}]({url}) - {publisher}\n"
+            return summary + refs_str
+        else:
+            return summary
 
     except Exception as e:
         return f"Error: {str(e)}"

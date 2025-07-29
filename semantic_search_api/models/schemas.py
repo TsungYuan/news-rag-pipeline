@@ -10,6 +10,7 @@ class ChunkMetadata(BaseModel):
     news_id: int
     similarity: Optional[float] = None
     chunk_text: Optional[str] = None
+    link: str = None
     metadata: Dict[str, Any]
 
 class SearchResponse(BaseModel):

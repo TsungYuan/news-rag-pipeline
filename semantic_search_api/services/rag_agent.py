@@ -39,7 +39,8 @@ def rag_ai_agent(query: str, top_k: int = 5) -> RAGAgentResponse:
                 "similarity": chunk.similarity,
                 "chunk_text": chunk.chunk_text,
                 "full_article": current_full_article,
-                "meta_data": chunk.metadata
+                "meta_data": chunk.metadata,
+                "link": chunk.link
             }
             llm_context_chunk.append(chunk_dict)
 

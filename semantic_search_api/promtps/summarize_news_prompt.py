@@ -19,6 +19,7 @@ SUMMARIZE_NEWS_PROMPT = """
 - `results.similarity`: 此新聞與 query 的語意相似度（越高越相關）。
 - `results.chunk_text`: 與使用者問題最相關的文字片段。這通常是生成回答的主要依據。
 - `results.full_article`: 當原始新聞的相關片段數量較少時（回傳新聞數量<=2時），此處會包含該新聞的完整文章內容。請注意，這部分內容可能較長，僅作為額外參考，主要回答仍應基於 chunk_text 中的精煉資訊。
+- `resultd.link`: 新聞網址。
 - `results.metadata`: 該新聞的額外資訊（metadata），包含：
   - `title`: 新聞標題
   - `news_id`: 同上，新聞唯一識別碼

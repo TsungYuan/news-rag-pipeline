@@ -14,9 +14,11 @@ def semantic_search(query: str, top_k: int=5) -> SearchResponse:
 
         with SessionLocal() as db:
             sql_only_chunk = text("""
-                    SELECT news_id,chunk_text, metadata, 
-                        1 - (embedding <=> CAST(:embedding_query AS vector)) AS similarity
-                    FROM news_chunk_embeddings
+                    SELECT ce.news_id, ce.chunk_text, ce.metadata, rd.link,
+                        1 - (ce.embedding <=> CAST(:embedding_query AS vector)) AS similarity
+                    FROM news_chunk_embeddings ce
+                    LEFT JOIN news_raw_data rd
+                        ON ce.news_id = rd.id
                     WHERE embedding IS NOT NULL
                     ORDER BY similarity DESC
                     LIMIT :top_k;
@@ -36,7 +38,8 @@ def semantic_search(query: str, top_k: int=5) -> SearchResponse:
                     news_id=row.news_id,
                     metadata=row.metadata,
                     chunk_text=row.chunk_text,
-                    similarity=row.similarity
+                    similarity=row.similarity,
+                    link=row.link
                 )
                 for row in similarity_result
             ]
