@@ -101,9 +101,8 @@ python gradio_app.py
 
 Enter a query like:
 
-```
-最近有什麼社會新聞嗎？
-```
+![_Example Chatbox Section:_](images/ai_chat_box.png)
+
 The pipeline will:
 1.	Search relevant news from the vector store
 2.	Construct a prompt using top results
@@ -112,7 +111,7 @@ The pipeline will:
 
 **Expected Output (Chat and Raw Data Section):**
 
-![_(Example of RAG summary and references)_](images/new_analytics_trend.png)
+_(Example of RAG summary and references)_
 
 ```
 answer:
@@ -160,7 +159,7 @@ result:
 
 Select a date range and the number of top results, then click "Analyze Data" to visualize the distribution of news categories and publishers.
 
-_Example Screenshot of Analytics Section:_
+![_Example Screenshot of Analytics Section:_](images/new_analytics_trend.png)
 
 
 ## 🧠 &nbsp;Model Info
