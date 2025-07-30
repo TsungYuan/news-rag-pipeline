@@ -99,8 +99,6 @@ python gradio_app.py
 
 **Chat Interface**
 
-Enter a query like:
-
 ![_Example Chatbox Section:_](images/ai_chat_box.png)
 
 The pipeline will:
