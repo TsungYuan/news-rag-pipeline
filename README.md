@@ -107,7 +107,7 @@ The pipeline will:
 3.	Send the prompt to Gemini API
 4.	Display the summary in the UI
 
-**Expected Output (Chat and Raw Data Section):**
+**Expected Output (Raw Data Section):**
 
 _(Example of Raw API Response JSON)_
 
@@ -115,7 +115,7 @@ _(Example of Raw API Response JSON)_
 {
   "query": "string",
   "answer":
-  {
+  {s
       "summary":
       "近期社會新聞事件涵蓋多個面向。其中..."
       "references":[
