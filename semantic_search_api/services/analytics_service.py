@@ -20,14 +20,16 @@ def get_top_categories_from_db(start_date: Optional[date] = None, end_date: Opti
             where_clauses.append("published_at >= :start_date")
             bind_params["start_date"] = datetime.combine(start_date, datetime.min.time())
 
-        bind_params["end_dt"] = datetime.combine(actual_end_date, datetime.max.time())
+        where_clauses.append("published_at <= :end_date")    
+        bind_params["end_date"] = datetime.combine(actual_end_date, datetime.max.time())
         
         where_sql = "WHERE " + " AND ".join(where_clauses) if where_clauses else ""
+        logger.info(f"Where clauses: {where_sql}")
 
         total_count_sql = text(f"""
                 SELECT COUNT(id) FROM news_metadata {where_sql};
             """)
-        logger.info(f"Start quering total news count between {start_date} and {end_date}.")
+        logger.info(f"Start quering total news count between {start_date} and {actual_end_date}.")
         total_news_in_range = db.execute(total_count_sql, bind_params).scalar_one()
         logger.info(f"Fetched {total_news_in_range} news.")
 
@@ -63,22 +65,24 @@ def get_top_publishers_from_db(start_date: Optional[date] = None, end_date: Opti
     db = SessionLocal()
     try:
         actual_end_date = end_date if end_date is not None else date.today()
-        
         where_clauses = []
         bind_params = {}
 
         if start_date:
             where_clauses.append("published_at >= :start_date")
             bind_params["start_date"] = datetime.combine(start_date, datetime.min.time())
+        actual_end_date = end_date if end_date is not None else date.today()
 
-        bind_params["end_dt"] = datetime.combine(actual_end_date, datetime.max.time())
+        where_clauses.append("published_at <= :end_date")
+        bind_params["end_date"] = datetime.combine(actual_end_date, datetime.max.time())
+        logger.info(f"start date: {start_date}, end date: {actual_end_date}")
         
         where_sql = "WHERE " + " AND ".join(where_clauses) if where_clauses else ""
 
         total_count_sql = text(f"""
                 SELECT COUNT(id) FROM news_metadata {where_sql};
             """)
-        logger.info(f"Start quering total news count between {start_date} and {end_date}.")
+        logger.info(f"Start quering total news count between {start_date} and {actual_end_date}.")
         total_news_in_range = db.execute(total_count_sql, bind_params).scalar_one()
         logger.info(f"Fetched {total_news_in_range} news.")
 

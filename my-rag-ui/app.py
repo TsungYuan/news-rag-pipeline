@@ -77,7 +77,7 @@ def get_top_categories_from_api(start_date_obj: datetime, end_date_obj: datetime
             }
         )
         
-        return plot_data, f"在 {data.get('start_date', '所有時間')} 到 {data.get('end_date', '所有時間')} 之間，共有 {data.get('total_news_in_range', 0)} 篇新聞。"
+        return plot_data, f"{data.get('total_news_in_range', 0)} was published from {data.get('start_date', '所有時間')} to {data.get('end_date', '所有時間')}."
 
     except requests.exceptions.RequestException as e:
         error_msg = f"Failed to fetch top categories: {str(e)}"
@@ -153,7 +153,7 @@ with gr.Blocks(title="Taiwan News Agent") as tabs:
 
     with gr.Tab("Chat"):
         with gr.Row():
-            with gr.Column(scale=2.5):
+            with gr.Column(scale=2):
                 gr.Markdown("# Taiwan News Agent")
                 chat_interface = gr.ChatInterface(
                     fn=query_api, 
@@ -196,19 +196,19 @@ with gr.Blocks(title="Taiwan News Agent") as tabs:
                     step=1,
                     label="Top N"
                 )
-                analyze_btn = gr.Button("分析")
+                analyze_btn = gr.Button("run")
             with gr.Column(scale=3):
                 category_bar_chart = gr.BarPlot(
-                    label="新聞類別分佈",
+                    label="News Categories Distribution",
                     x="Category", 
                     y="Count", 
                     x_as_category=True,
                     height=400
                 )
-                analytics_info_text = gr.Markdown("點擊 '分析' 以顯示結果。")
+                analytics_info_text = gr.Markdown("click 'run' to show results.")
             with gr.Column(scale=3):
                 publisher_bar_chart = gr.BarPlot(
-                    label="新聞分布者分佈",
+                    label="News Publishers Distribution",
                     x="Publisher", 
                     y="Count", 
                     x_as_publisher=True,

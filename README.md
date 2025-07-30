@@ -4,7 +4,7 @@ A lightweight Retrieval-Augmented Generation (RAG) pipeline that allows users to
 
 ## 🚀 &nbsp;Project Overview
 
-This project builds an end-to-end pipeline combining ETL, vector search, and Large Language Models (LLMs) to summarize news articles based on a user's query.
+This project builds an end-to-end pipeline combining ETL, vector search, and Large Language Models (LLMs) to summarize news articles based on a user's query. Beyond retrieval, it also provides insightful analytics into news distribution across categories and publishers over time.
 
 ### 🔧 &nbsp;Components
 
@@ -31,6 +31,10 @@ This project builds an end-to-end pipeline combining ETL, vector search, and Lar
 
 - **RAG with Gemini API**  
   Uses Gemini 2.5 Pro to generate natural language answers based on top-k similar articles.
+
+- **News Trend Analytics Visually explore news distribution with interactive bar charts:**
+  - Top Categories: Identify the most dominant news categories within a specified date range.
+  - Top Publishers: Understand which publishers are most active or have the most articles in a given period.
 
 - **API & UI**  
   - FastAPI serves the backend logic.  
@@ -105,8 +109,8 @@ The pipeline will:
 4.	Display the summary in the UI
 
 <br>
-Output will be like:
-
+Expected Output (Chat and Raw Data Section):
+*(Example of RAG summary and references)*
 answer:
 ```
 {
@@ -126,7 +130,7 @@ answer:
 
 }
 ```
-
+_(Example of Raw API Response JSON)_
 result:
 ```
 [
