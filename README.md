@@ -110,10 +110,11 @@ The pipeline will:
 
 <br>
 Expected Output (Chat and Raw Data Section):
-(Example of RAG summary and references)
 
-answer:
+_(Example of RAG summary and references)_
+
 ```
+answer:
 {
     "summary":
     "近期社會新聞事件涵蓋多個面向。其中..."
@@ -132,8 +133,9 @@ answer:
 }
 ```
 _(Example of Raw API Response JSON)_
-result:
+
 ```
+result:
 [
     {
         "news_id": 1,
