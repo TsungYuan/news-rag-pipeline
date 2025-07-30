@@ -97,10 +97,12 @@ python gradio_app.py
 
 ## 📥 &nbsp;Example Usage
 
+**Chat Interface**
+
 Enter a query like:
 
 ```
-最近有什麼特別的社會新聞嗎？
+最近有什麼社會新聞嗎？
 ```
 The pipeline will:
 1.	Search relevant news from the vector store
@@ -108,8 +110,7 @@ The pipeline will:
 3.	Send the prompt to Gemini API
 4.	Display the summary in the UI
 
-<br>
-Expected Output (Chat and Raw Data Section):
+**Expected Output (Chat and Raw Data Section):**
 
 _(Example of RAG summary and references)_
 
@@ -154,6 +155,13 @@ result:
     ...
 ]
 ```
+
+**News Trend Analytics**
+
+Select a date range and the number of top results, then click "Analyze Data" to visualize the distribution of news categories and publishers.
+
+_Example Screenshot of Analytics Section:_
+
 
 ## 🧠 &nbsp;Model Info
 
