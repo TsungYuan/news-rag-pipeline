@@ -110,7 +110,8 @@ The pipeline will:
 
 <br>
 Expected Output (Chat and Raw Data Section):
-*(Example of RAG summary and references)*
+(Example of RAG summary and references)
+
 answer:
 ```
 {
