@@ -109,48 +109,40 @@ The pipeline will:
 
 **Expected Output (Chat and Raw Data Section):**
 
-_(Example of RAG summary and references)_
-
-```
-answer:
-{
-    "summary":
-    "近期社會新聞事件涵蓋多個面向。其中..."
-    "references":[
-        {
-            "title": "...",
-            "publisher": "..."
-        },
-        {
-            "title": "...",
-            "publisher": "..."
-        },
-        ...
-    ]
-
-}
-```
 _(Example of Raw API Response JSON)_
 
 ```
-result:
-[
-    {
-        "news_id": 1,
-        "similarity": 0.5624959953117447,
-        "content": "...",
-        "metadata": {
-            "news_id": 1,
-            "title": "...",
-            "category": "社會",
-            "chunk_idx": 200,
-            "publisher": "...",
-            "pubished_at": "date time"
-        }
-
-    },
-    ...
-]
+{
+  "query": "string",
+  "answer":
+  {
+      "summary":
+      "近期社會新聞事件涵蓋多個面向。其中..."
+      "references":[
+          {
+              "news_id": 001,
+              "title": "...",
+              "publisher": "..."
+          }, ...
+      ]
+  }
+  "result":
+  [
+      {
+          "news_id": 1,
+          "similarity": 0.5624959953117447,
+          "content": "...",
+          "metadata": {
+              "news_id": 1,
+              "title": "...",
+              "category": "社會",
+              "chunk_idx": 200,
+              "publisher": "...",
+              "pubished_at": "date time"
+          }
+      }, ...
+  ]
+}
 ```
 
 **News Trend Analytics**
