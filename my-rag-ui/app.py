@@ -203,7 +203,8 @@ with gr.Blocks(title="Taiwan News Agent") as tabs:
                     x="Category", 
                     y="Count", 
                     x_as_category=True,
-                    height=400
+                    height=400,
+                    sort="-y"
                 )
                 analytics_info_text = gr.Markdown("click 'run' to show results.")
             with gr.Column(scale=3):
@@ -212,7 +213,8 @@ with gr.Blocks(title="Taiwan News Agent") as tabs:
                     x="Publisher", 
                     y="Count", 
                     x_as_publisher=True,
-                    height=400
+                    height=400,
+                    sort="-y"
                 )
 
         analyze_btn.click(
