@@ -112,7 +112,7 @@ The pipeline will:
 
 **Expected Output (Chat and Raw Data Section):**
 
-![_(Example of RAG summary and references)_](images/New Analytics Trend.png)
+![_(Example of RAG summary and references)_](images/new_analytics_trend.png)
 
 ```
 answer:
