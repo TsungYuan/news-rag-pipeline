@@ -26,7 +26,7 @@ SUMMARIZE_NEWS_PROMPT = """
   - `category`: 新聞分類（例如：政治、社會、財經等）
   - `chunk_idx`: 本段文字在新聞中的順序
   - `publisher`: 新聞發布來源（例如：中央社、自由時報）
-  - `published_at`: 發布時間（GMT+8）
+  - `published_at`: 發布時間
 
 ---
 

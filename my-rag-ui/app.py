@@ -2,11 +2,10 @@ import gradio as gr
 import requests
 import json
 import pandas as pd
+import os
 from datetime import date, datetime, timedelta
 
-API_BASE_URL = "http://semantic-api:8000"
-API_URL = "http://semantic-api:8000/rag_agent"
-ANALYTIC_URL = "http://semantic-api:8000/top_categories"
+API_BASE_URL = os.getenv("API_BASE_URL")
 
 def query_api(user_input, chat_history):
     payload = {"query": user_input}
