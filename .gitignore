@@ -63,3 +63,8 @@ dags/__pycache__/
 copilot/
 .history/
 *.drawio
+
+
+# ===== Optional: Demo file =====
+*.mov
+
