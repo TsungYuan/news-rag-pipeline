@@ -25,16 +25,29 @@ version: '3.8'
 
 x-airflow-common:
   &airflow-common
+<<<<<<< HEAD
   build: .
   image: ${AIRFLOW_IMAGE_NAME:-my-airflow:1.0.0}
   env_file:
     - .env
+=======
+  # In order to add custom dependencies or upgrade provider distributions you can use your extended image.
+  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
+  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
+  image: ${AIRFLOW_IMAGE_NAME:-my-airflow:1.0.0}
+  # build: .
+>>>>>>> fix-version
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__CORE__AUTH_MANAGER: airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager
+<<<<<<< HEAD
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+=======
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@postgres/$${POSTGRES_DB}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@postgres/$${POSTGRES_DB}
+>>>>>>> fix-version
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
   networks:
@@ -59,15 +72,25 @@ services:
     env_file:
       - .env
     environment:
+<<<<<<< HEAD
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+=======
+      POSTGRES_USER: $${POSTGRES_USER}
+      POSTGRES_PASSWORD: $${POSTGRES_PASSWORD}
+      POSTGRES_DB: $${POSTGRES_DB}
+>>>>>>> fix-version
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     healthcheck:
+<<<<<<< HEAD
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+=======
+      test: ["CMD", "pg_isready", "-U", "$${POSTGRES_USER}"]
+>>>>>>> fix-version
       interval: 10s
       retries: 5
       start_period: 5s
@@ -230,8 +253,11 @@ services:
       retries: 5
       start_period: 30s
     restart: always
+<<<<<<< HEAD
     networks:
       - news_reco_network
+=======
+>>>>>>> fix-version
 
   gradio-ui:
     build: ./my-rag-ui
@@ -243,6 +269,12 @@ services:
       - .env
     depends_on:
       - semantic-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7860/"]
