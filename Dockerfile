@@ -5,7 +5,7 @@ FROM apache/airflow:3.0.2
 
 # Copy and install requirements
 COPY requirements.txt /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
+RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
 
 # Copy the application source code
 COPY src/ /opt/airflow/src/
