@@ -1,14 +1,16 @@
+# ---- Simplified Airflow Dockerfile ----
+# This version installs dependencies directly into the main environment,
+# which is the recommended pattern for the official Airflow image.
 FROM apache/airflow:3.0.2
 
+# Copy and install requirements
 COPY requirements.txt /requirements.txt
-RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
 
-# This line is correct as is, assuming your Dockerfile is in the 'your_project' directory
+# Copy the application source code
 COPY src/ /opt/airflow/src/
 
-# First, ensure PYTHONPATH is defined (even if empty)
+# Set the PYTHONPATH, preserving the ability to pass a default value
 ARG DEFAULT_PYTHONPATH=""
 ENV PYTHONPATH="${DEFAULT_PYTHONPATH}"
-
-# Then, prepend your custom path
 ENV PYTHONPATH="/opt/airflow/src/:${PYTHONPATH}"

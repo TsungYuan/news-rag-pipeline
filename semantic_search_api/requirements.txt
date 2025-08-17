@@ -6,3 +6,7 @@ pandas
 sentence-transformers
 google-generativeai
 requests
+langchain
+langchain-google-genai
+langchain-community
+faiss-cpu
